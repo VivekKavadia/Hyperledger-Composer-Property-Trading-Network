@@ -1,3 +1,5 @@
+//TODO: Commit files related to Yeoman network generation tool.
+
 ASSUMPTIONS:
 	Created, intent for sale and registered transactions can be executed only by system admin.
 	Other participants have read only access to assets.
