@@ -1,0 +1,57 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+//Query to select all the buyer participants in the system
+query selectBuyers {
+     description: "Select all Buyers"
+     statement:
+          SELECT org.makaan.property.Buyer
+}
+
+//Query to select all the seller participants in the system
+query selectSellers {
+     description: "Select all Sellers"
+     statement:
+          SELECT org.makaan.property.Seller
+}
+
+//Query to select all the property assets in the system
+query selectProperties {
+     description: "Select all Properties"
+     statement:
+          SELECT org.makaan.property.Property
+}
+
+//Query to select a particular property
+query selectPropertyFromPropertyID {
+     description: "Select property from property ID"
+     statement: 
+          SELECT org.makaan.property.Property
+          WHERE (propertyID == _$propertyID)
+}
+
+//Query to select all property listing assets in the system
+query selectPropertyListings {
+     description: "Select all Properties listed for sale"
+     statement:
+          SELECT org.makaan.property.PropertyListing
+}
+
+//Query to select all property assets listed for sale in the system
+query selectPropertiesListedForSale {
+     description: "Select all properties which are listed for sale"
+     statement: 
+          SELECT org.makaan.property.Property
+          WHERE (status == "IntentForSale")
+}

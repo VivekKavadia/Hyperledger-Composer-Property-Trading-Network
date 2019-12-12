@@ -1,0 +1,84 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+//Given everyone access to everything
+rule AllAccess {
+   description: "Everybody can access everything"
+   participant: "org.hyperledger.composer.system.Participant"
+   operation: ALL
+   resource: "org.hyperledger.composer.system.**"
+   action: ALLOW
+}
+
+//Buyers are allowed to see only those property listings which have status as Intent for Sale
+rule BuyerCanSeeListedProperties {
+    description: "Allow Buyers to see the properties listed for intent of sale"
+    participant: "org.makaan.property.Buyer"
+    operation: READ
+    resource(propertyListing): "org.makaan.property.PropertyListing"
+    condition: (propertyListing.status == "IntentForSale")
+    action: ALLOW
+}
+
+//Sellers are allowed to see only their own properties
+rule SellerCanSeeOnlyOwnedProperty {
+    description: "Seller can only see their properties"
+    participant(seller): "org.makaan.property.Seller"
+    operation: READ
+    resource(property): "org.makaan.property.Property"
+    condition: (seller.sellerName == property.owner)
+    action: ALLOW
+}
+
+//Sellers are allowed to see property listings of only their own propeties
+rule SellerCanSeeOnlyOwnedPropertyListing {
+    description: "Seller can only see their listed properties"
+    participant(seller): "org.makaan.property.Seller"
+    operation: READ
+    resource(propertyListing): "org.makaan.property.PropertyListing"
+    condition: (seller.sellerName == propertyListing.owner)
+    action: ALLOW
+}
+
+rule RegistrarPropertyAccess {
+    description: "Registrar has access to all properties"
+    participant: "org.makaan.property.Registrar"
+    operation: READ
+    resource: "org.makaan.property.Property"
+    action: ALLOW
+}
+
+rule RegistrarPropertyListingAccess {
+    description: "Registrar has access to all property listings"
+    participant: "org.makaan.property.Registrar"
+    operation: READ
+    resource: "org.makaan.property.PropertyListing"
+    action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}

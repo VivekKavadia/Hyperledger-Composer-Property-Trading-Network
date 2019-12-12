@@ -1,0 +1,122 @@
+/* This namespace helps in idetifying the entities for the network. */
+namespace org.makaan.property
+
+/* Asset Property identified by a string propertyID
+This is used to maintain the properties which are registered in the system.
+*/
+
+asset Property identified by propertyID {
+     o String propertyID
+     o String owner
+     o String registrationDate
+     o String propertyType
+     o String location
+     o Boolean public
+     o Boolean private
+     o Integer marketPrice
+     o Boolean intentForSale
+     o PropertyStatus status default = "Registered"
+}
+
+/* Enum PropertyStatus
+This is used to maintain the property status
+*/
+enum PropertyStatus {
+     o IntentForSale
+     o Registered
+}
+
+/* Asset PropertyListing identified by a string PLID
+This is used to maintain the properties which are listed for sale in the system.
+*/
+asset PropertyListing identified by PLID {
+     o String PLID
+     o String owner
+     o String registrationDate
+     o String propertyType
+     o String location
+     o Integer marketPrice
+     o PropertyListingStatus status default = "IntentForSale"
+}
+
+/* Enum PropertyListingStatus
+This is used to maintain the property listing status
+*/
+enum PropertyListingStatus {
+     o Created
+     o IntentForSale
+     o Registered
+}
+
+/* Participant Buyer identified by a string buyerName
+This is used to maintain the buyers who are part of the system.
+*/
+participant Buyer identified by buyerName {
+     o String buyerName
+     o String buyerEmail
+     o Integer buyerIDNumber //Passport, SSN, Aadhar etc.
+     o String buyerBankName
+     o String buyerBankAddress
+     o Integer buyerAccountNumber
+     o String buyerIFSC
+     o Integer buyerBankBalance optional
+}
+
+/* Participant Seller identified by a string sellerName
+This is used to maintain the sellers who are part of the  system.
+*/
+participant Seller identified by sellerName {
+     o String sellerName
+     o String sellerEmail
+     o Integer sellerIDNumber
+     o String sellerBankName
+     o String sellerBankAddress
+     o Integer sellerAccountNumber
+     o String sellerIFSC
+     o Integer sellerBankBalance optional
+     o String sellerSaleDeedDocs
+}
+
+/* Participant Registrar identified by a string registrarName
+This is used to maintain the registrars who are part of the  system.
+*/
+participant Registrar identified by registrarName {
+     o String registrarName
+     o String registrarEmail
+}
+
+/* Transaction Created
+This is used to add new properties in the system.
+*/
+@returns(String)
+transaction Created {
+     o String propertyID
+     o String owner
+     o String registrationDate
+     o String propertyType
+     o String location
+     o Boolean public
+     o Boolean private
+     o Integer marketPrice
+     o Boolean intentForSale
+}
+
+/* Transaction IntentForSale
+This is used to create new property listings of properties available for sale
+*/
+@returns(String)
+transaction IntentForSale {
+     --> Property property
+     --> PropertyListing propertyListing
+     --> Seller seller
+}
+
+/* Transaction Registered
+This is used to conclude transfer of property to the new owner after a successful sale
+*/
+@returns(String)
+transaction Registered {
+     o String propertyID
+     --> PropertyListing propertyListing
+     --> Buyer buyer
+}
